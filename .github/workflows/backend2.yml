@@ -2,11 +2,15 @@ name: Build and Push Backend2 Image
 
 on:
   push:
-    branches:
-      - dev
+    branches: [dev]
+    paths:
+      - 'code/backend1/**'
+      - 'code/backend2/**'
   pull_request:
-    branches:
-      - dev
+    branches: [dev]
+    paths:
+      - 'code/backend1/**'
+      - 'code/backend2/**'
 
 env:
   REGISTRY: docker.io

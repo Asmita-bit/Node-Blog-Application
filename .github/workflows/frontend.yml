@@ -2,11 +2,13 @@ name: Build and Push Frontend Image
 
 on:
   push:
-    branches:
-      - dev
+    branches: [dev]
+    paths:
+      - 'code/frontend/**'
   pull_request:
-    branches:
-      - dev
+    branches: [dev]
+    paths:
+      - 'code/frontend/**'
 
 env:
   REGISTRY: docker.io
