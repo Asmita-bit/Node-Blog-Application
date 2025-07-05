@@ -54,6 +54,20 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./code/backend1/node_modules
+          key: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+          restore-keys: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+
+      - name: Install Dependencies (Only if not cached)
+        working-directory: ./code/backend1
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install
+
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
@@ -66,5 +80,5 @@ jobs:
           file: ./code/backend2/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.BACKEND2_IMAGE_NAME }}:${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}-${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.BACKEND2_IMAGE_NAME }}:${{ github.ref == 'refs/heads/main' && 'prod-latest' || 'dev-latest' }}
+            ${{ env.REGISTRY }}/${{ env.BACKEND2_IMAGE_NAME }}:$${{ github.ref_name }}
+            ${{ env.REGISTRY }}/${{ env.BACKEND2_IMAGE_NAME }}:$latest
