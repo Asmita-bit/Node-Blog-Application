@@ -1,0 +1,49 @@
+services:
+  myweb:
+    image: code-myweb:latest
+    ports: 
+      - "80:80"
+    networks:
+      - custom_overlay     
+  backend1:
+    image: code-backend1:latest
+    ports:
+      - "${PORT:-4000}:4000"
+    networks:
+      - custom_overlay
+    depends_on:
+      - database-container
+      
+  backend2:
+    image: code-backend2:latest
+    ports:
+     - "${PORT:-4001}:4001"
+    networks:
+      - custom_overlay
+    depends_on:
+      - database-container 
+
+  database-container:
+    image: postgres:15-alpine
+    env_file: "./database/.env"
+    ports:
+      - "${PORT:-5432}:5432"  
+    volumes:
+     - dbvolume:/var/lib/postgresql/data/ 
+    networks:
+     - custom_overlay 
+  dozzle: 
+    image: amir20/dozzle:latest
+    ports:
+      - "9000:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock    
+    networks:
+    - custom_overlay
+
+networks:
+  custom_overlay:
+    driver: overlay
+    attachable: true
+volumes:
+  dbvolume:

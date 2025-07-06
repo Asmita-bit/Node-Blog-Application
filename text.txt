@@ -1,0 +1,49 @@
+ # - name: Cache node_modules
+      #   id: cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ./code/backend1/node_modules
+      #     key: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+      #     restore-keys: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+
+      # - name: Install Dependencies (Only if not cached)
+      #   working-directory: ./code/backend1
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: yarn install
+
+------------------------------------------------------------------------------------------------------------------------------------- 
+ - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./code/frontend/node_modules
+          key: frontend-cache-${{ hashFiles('code/frontend/yarn.lock') }}
+          restore-keys: frontend-cache-${{ hashFiles('code/frontend/yarn.lock') }}
+
+      - name: Install Dependencies (Only if not cached)
+        working-directory: ./code/frontend
+        if: steps.cache.outputs.cache-hit != 'true'     
+--------------------------------------------------------------------------------------------------------------------------------------
+ - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./code/backend1/node_modules
+          key: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+          restore-keys: backend1-cache-${{ hashFiles('code/backend1/yarn.lock') }}
+
+      - name: Install Dependencies (Only if not cached)
+        working-directory: ./code/backend2
+        if: steps.cache.outputs.cache-hit != 'true'
+------------------------------------------------------------------------------------------------------------------------------------------        
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./code/backend2/node_modules
+          key: backend2-cache-${{ hashFiles('code/backend2/yarn.lock') }}
+          restore-keys: backend2-cache-${{ hashFiles('code/backend2/yarn.lock') }}
+
+      - name: Install Dependencies (Only if not cached)
+        working-directory: ./code/backend2
+        if: steps.cache.outputs.cache-hit != 'true'
