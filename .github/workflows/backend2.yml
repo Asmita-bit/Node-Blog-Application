@@ -71,7 +71,7 @@ jobs:
   build_push_backend2:
     name: Build & Push Backend2 Image
     runs-on: [self-hosted, backend]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main')
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature') && github.base_ref == 'dev'
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v3
