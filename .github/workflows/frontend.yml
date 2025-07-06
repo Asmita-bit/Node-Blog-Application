@@ -23,7 +23,7 @@ env:
 
 jobs:
   commitlint:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, frontend]
     if: github.event_name == 'pull_request' &&(github.head_ref == 'feature' || startsWith(github.head_ref, 'feature/*')) && github.base_ref == 'dev'
     steps:
       - name: Checkout code
@@ -43,7 +43,7 @@ jobs:
         run: |
           git log origin/${{ github.base_ref }}..HEAD --pretty=format:"%s" | npx commitlint
   check_lint_frontend:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, frontend]
     if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature') && github.base_ref == 'dev'
     needs: [commitlint]
     steps:
@@ -80,8 +80,8 @@ jobs:
       - name: Log in to DockerHub  
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCK_UNAME }}
+          password: ${{ secrets.DOCK_TOKEN }}
       - name: Build & Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
