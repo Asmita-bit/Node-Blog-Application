@@ -51,9 +51,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./code/backend2/node_modules
+          key: backend2-cache-${{ hashFiles('code/backend2/yarn.lock') }}
+          restore-keys: backend2-cache-${{ hashFiles('code/backend2/yarn.lock') }}
+    
+      - name: Install Dependencies (Only if not cached)
+        working-directory: ./code/backend2
+        if: steps.cache.outputs.cache-hit != 'true'
+
+        run: yarn install
       - name: Lint Backend2
         working-directory: ./code/backend2
-        run: yarn && yarn lint
+        run: yarn lint
 
   build_push_backend2:
     name: Build & Push Backend2 Image
