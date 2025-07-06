@@ -35,7 +35,7 @@ jobs:
           node-version: '20'
       - name: Install Commitlint
         run: |
-          npm install --save-dev @commitlint/cli @commitlint/config-conventional
+          yarn add -D @commitlint/cli @commitlint/config-conventional
       - name: Add commitlint config
         run: |
           echo "module.exports = {extends: ['@commitlint/config-conventional']};" > commitlint.config.js
