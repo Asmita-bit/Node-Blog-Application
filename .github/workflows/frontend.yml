@@ -49,9 +49,11 @@ jobs:
     steps:
       - name: Checkout code  
         uses: actions/checkout@v3
+
+     
       - name: Lint Frontend(install packages)
         working-directory: ./code/frontend
-        run: yarn && yarn lint
+        run:  yarn && yarn lint
 
   build_frontend:
     name: Build & Push Frontend Image
@@ -60,19 +62,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Cache node_modules
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ./code/frontend/node_modules
-          key: backend1-cache-${{ hashFiles('code/frontend/yarn.lock') }}
-          restore-keys: backend1-cache-${{ hashFiles('code/frontend/yarn.lock') }}
-
-      - name: Install Dependencies (Only if not cached)
-        working-directory: ./code/backend1
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
